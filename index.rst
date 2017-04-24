@@ -15,5 +15,6 @@ stable Ethereum building blocks
    :maxdepth: 2
    :caption: Contents:
 
+   ds_auth.rst
    ds_math.rst
    
