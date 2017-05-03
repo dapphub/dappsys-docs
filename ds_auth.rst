@@ -67,8 +67,7 @@ This ensures that your production system is always consistent and can easily be 
 DSAuth
 ======
 
-TODO
-Your contract should inherit from this class if you want it to be part of a Dappsys Authority system.
+Your contract should inherit from the ``DSAuth`` type if you want it to have functions that can only be called by specifically authorized addresses.
 
 Import
 ------

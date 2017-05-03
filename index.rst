@@ -16,5 +16,6 @@ stable Ethereum building blocks
    :caption: Contents:
 
    ds_auth.rst
+   ds_guard.rst
    ds_math.rst
    
