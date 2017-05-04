@@ -142,7 +142,7 @@ Import
 Parent Types
 ------------
 
-:ref:`DSTokenBase(0) <DSTokenBase>`, :ref:`DSAuth <DSAuth>`, DSNote
+:ref:`DSTokenBase(0) <DSTokenBase>`, :ref:`DSStop <DSStop>`, :ref:`DSAuth <DSAuth>`, DSNote
 
 
 API Reference
