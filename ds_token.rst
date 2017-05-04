@@ -248,7 +248,7 @@ Returns the value of the public ``name`` variable. Used to identify the token. D
 
 ::
 
-    bytes32   public  name = ""
+    bytes32 public name = ""
 
 function setName
 ^^^^^^^^^^^^^^^^

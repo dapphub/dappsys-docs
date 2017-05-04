@@ -100,6 +100,15 @@ This event is logged when setting the contract's ``owner`` member.
     
     event LogSetOwner (address indexed owner)
 
+function DSAuth
+^^^^^^^^^^^^^^^
+
+The constructor function sets ``msg.sender`` to be the initial ``owner`` of the contract. It does not need to be explicitly called because it doesn't take any parameters.
+
+::
+
+    function DSAuth()
+
 function authority
 ^^^^^^^^^^^^^^^^^^
 
