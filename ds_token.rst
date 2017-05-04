@@ -222,39 +222,3 @@ Identical functionality to its parent function in ``DSTokenBase``. Adds the ``st
 ::
 
     function approve(address guy, uint wad) stoppable note returns (bool)
-
-function stopped
-^^^^^^^^^^^^^^^^
-
-Returns the value of the public ``stopped`` variable, which is set to ``true`` when the token's ``stoppable`` functions are disabled.
-
-::
-    
-    bool public stopped
-
-function stop
-^^^^^^^^^^^^^
-
-Sets ``stopped`` to ``true``, which disables normal token behavior.
-
-::
-
-    function stop() auth note
-
-function start
-^^^^^^^^^^^^^^
-
-Sets ``stopped`` to ``false``, which enables normal token behavior.
-
-::
-
-    function start() auth note
-
-modifier stoppable
-^^^^^^^^^^^^^^^^^^
-
-Asserts that ``stoppable`` is equal to ``false``, allowing an admin account to disable normal token operations.
-
-::
-
-    modifier stoppable

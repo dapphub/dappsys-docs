@@ -19,4 +19,5 @@ stable Ethereum building blocks
    ds_guard.rst
    ds_math.rst
    ds_token.rst
+   ds_stop.rst
    
