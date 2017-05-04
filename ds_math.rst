@@ -38,6 +38,8 @@ Wad functions have a ``w`` prefix: ``wadd``, ``wsub``, ``wmul``, ``wdiv``, ``wmi
 
 Ray functions have a ``r`` prefix: ``radd``, ``rsub``, ``rmul``, ``rdiv``, ``rmin``, and ``rmax``.
 
+.. _DSMath:
+
 DSMath
 ======
 
