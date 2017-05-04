@@ -148,6 +148,15 @@ Parent Types
 API Reference
 -------------
 
+function DSToken
+^^^^^^^^^^^^^^^^
+
+The constructor function only assumes you want a custom symbol. For custom ``name``, see the ``setName`` function. For custom ``decimals``, please think carefully about what you're doing and then override the type if you still need them.
+
+::
+
+    function DSToken(bytes32 symbol_)
+
 function symbol
 ^^^^^^^^^^^^^^^
 
@@ -156,6 +165,15 @@ Returns the value of the public ``symbol`` variable. Used to identify the token.
 ::
 
     string public symbol
+
+function decimals
+^^^^^^^^^^^^^^^^^
+
+Returns ``18``. For custom ``decimals``, please think carefully about what you're doing and then override the type if you still need them.
+
+::
+
+    uint256 public decimals = 18
 
 
 function mint
@@ -222,3 +240,21 @@ Identical functionality to its parent function in ``DSTokenBase``. Adds the ``st
 ::
 
     function approve(address guy, uint wad) stoppable note returns (bool)
+
+function name
+^^^^^^^^^^^^^
+
+Returns the value of the public ``name`` variable. Used to identify the token. Defaults to empty string and can be set via ``setName``.
+
+::
+
+    bytes32   public  name = ""
+
+function setName
+^^^^^^^^^^^^^^^^
+
+Sets the token's ``name`` variable. Controlled by ``auth``.
+
+::
+
+    function setName(bytes32 name_) auth
