@@ -21,7 +21,7 @@ Import
 Parent Types
 ------------
 
-:ref:`DSAuth <DSAuth>`, DSNote
+:ref:`DSAuth <DSAuth>`, :ref:`DSNote <DSNote>`
 
 
 API Reference
