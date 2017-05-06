@@ -40,10 +40,10 @@ This is what makes ``DSToken`` so useful at its core. It is obvious that all the
             
             uint prize = wdiv(wad, rules.serviceFee());
 
-            claimTokens.pull(msg.sender, wad);
+            appToken.pull(msg.sender, wad);
 
             // only this contract is authorized to burn tokens
-            claimTokens.burn(prize);
+            appToken.burn(prize);
 
             deposit.transfer(msg.sender, prize);
         }
