@@ -16,7 +16,7 @@ Any function that is decorated with the ``auth`` modifier will perform an author
 
 ::
 
-    authority.permitted(msg.sender, this, msg.sig)
+    authority.canCall(msg.sender, this, msg.sig)
 
 The authority will return ``true`` if ``msg.sender`` is authorized to call the function identified by ``msg.sig`` and ``false`` otherwise. 
 
@@ -25,28 +25,28 @@ This is an extremely powerful design pattern because it creates a separation of 
 * A `simple whitelist <https://github.com/dapphub/ds-guard>`_:
 ::
 
-    address 0x123abc is permitted to call function mint on 0xdef456
+    address 0x123abc canCall function mint on 0xdef456
 
 * A timelocked whitelist:
 ::
 
-    address 0x123abc is permitted to call function mint on 0xdef456 
+    address 0x123abc canCall function mint on 0xdef456 
     two days after proposing the action to the authority
 
 * A `role-based permissioning system <https://github.com/dapphub/ds-roles>`_:
 ::
 
     address 0x123abc is a member of group 1 
-    which is permitted to call function mint on 0xdef456
+    which canCall function mint on 0xdef456
 
 * A voter veto system:
 ::
 
-    address 0x123abc is permitted to call function mint on 0xdef456 
+    address 0x123abc canCall function mint on 0xdef456 
     two days after proposing the action to the authority 
     unless 50% of these token holders veto the action
 
-From the application contract's point of view, it's just asking if ``msg.sender`` is ``permitted`` to call the function it is trying to call. It doesn't need to worry about all these different schemes that the authority contract might be using. Because the authority member is updateable, this means that more complex authorization/governance logic can be introduced to the system later. Conversely, access can be removed once the system is finished and ready to "lockout" privileged administrators.
+From the application contract's point of view, it's just asking if ``msg.sender`` ``canCall`` the function it is trying to call. It doesn't need to worry about all these different schemes that the authority contract might be using. Because the authority member is updateable, this means that more complex authorization/governance logic can be introduced to the system later. Conversely, access can be removed once the system is finished and ready to "lockout" privileged administrators.
 
 Updateability is one of the key benefits offered by DS-Auth. Consider a system where backend-contract A is calling an ``auth``-controlled function on another backend-contract B, both owned by authority-contract X. Replacing B with backend-contract C would proceed as follows: 
 
@@ -148,7 +148,7 @@ This function sets the ``owner`` member that automatically has access to all the
 function isAuthorized
 ^^^^^^^^^^^^^^^^^^^^^
 
-This function returns ``true`` if the ``src`` address is allowed to call the ``sig`` function(s) on this contract. It is mainly used internally by the ``auth`` and ``auth_as`` modifiers. This function first checks if ``src`` is equal to the ``owner`` member, otherwise it calls ``authority.permitted(src, this, sig)`` and returns the result.
+This function returns ``true`` if the ``src`` address is allowed to call the ``sig`` function(s) on this contract. It is mainly used internally by the ``auth`` and ``authorized`` modifiers. This function first checks if ``src`` is equal to the ``owner`` member, otherwise it calls ``authority.canCall(src, this, sig)`` and returns the result.
 
 ::
 
@@ -163,10 +163,10 @@ This function modifier is the main entrypoint into the logic of ``DSAuth``. Deco
 
     modifier auth
 
-modifier auth_as
+modifier authorized
 ^^^^^^^^^^^^^^^^^^^
 
-DS-Auth also offers a slightly more complex modifier called ``auth_as``. This modifier takes an arbitrary ``bytes4`` value instead of the standard ``msg.sig`` that is used by ``auth``. This means that you can group numerous functions under one ``sig`` that will all be controlled by the same line of authorization data. An example of the difference:
+DS-Auth also offers a slightly more complex modifier called ``authorized``. This modifier takes an arbitrary ``bytes4`` value instead of the standard ``msg.sig`` that is used by ``auth``. This means that you can group numerous functions under one ``sig`` that will all be controlled by the same line of authorization data. An example of the difference:
 
 ::
 
@@ -176,7 +176,7 @@ DS-Auth also offers a slightly more complex modifier called ``auth_as``. This mo
     contract UsingAuth is DSAuth {
 
         // calling approveAction will cause
-        // authority.permitted(msg.sender, this, "approveAction")
+        // authority.canCall(msg.sender, this, "approveAction")
         // to be called
 
         function approveAction() auth {
@@ -184,7 +184,7 @@ DS-Auth also offers a slightly more complex modifier called ``auth_as``. This mo
         }
 
         // calling approveAction will cause
-        // authority.permitted(msg.sender, this, "executeAction")
+        // authority.canCall(msg.sender, this, "executeAction")
         // to be called
 
         function executeAction() auth {
@@ -195,38 +195,38 @@ DS-Auth also offers a slightly more complex modifier called ``auth_as``. This mo
     // this contract needs only one entry 
     // in the owning DSAuthority contract
 
-    contract UsingAuthAs is DSAuth {
+    contract UsingAuthorized is DSAuth {
 
         // calling approveAction will cause
-        // authority.permitted(msg.sender, this, "actions")
+        // authority.canCall(msg.sender, this, "actions")
         // to be called
 
-        function approveAction() auth_as("actions") {
+        function approveAction() authorized("actions") {
             // business logic
         }
 
         // calling approveAction will cause
-        // authority.permitted(msg.sender, this, "actions")
+        // authority.canCall(msg.sender, this, "actions")
         // to be called
 
-        function executeAction() auth_as("actions") {
+        function executeAction() authorized("actions") {
             // business logic
         }
     }
 
-The developer should be aware of the design tradeoff here: using ``auth`` is simpler and less prone to human-error, while using ``auth_as`` is more convenient for large systems but requires more thorough review to ensure that functions are being grouped together properly. 
+The developer should be aware of the design tradeoff here: using ``auth`` is simpler and less prone to human-error, while using ``authorized`` is more convenient for large systems but requires more thorough review to ensure that functions are being grouped together properly. 
 
 
 ::
 
-    modifier auth_as(bytes32 sig)
+    modifier authorized(bytes4 sig)
 
 .. _DSAuthority:
 
 DSAuthority
 ===========
 
-``DSAuthority`` is an interface that declares just one function: ``permitted``. Contracts that are of this type store authorization data about what addresses can call what specific functions on contracts that are under their authority. Each contract of type ``DSAuth`` consults its ``DSAuthority authority`` member when granting access to its functions.
+``DSAuthority`` is an interface that declares just one function: ``canCall``. Contracts that are of this type store authorization data about what addresses can call what specific functions on contracts that are under their authority. Each contract of type ``DSAuth`` consults its ``DSAuthority authority`` member when granting access to its functions.
 
 You should extend ``DSAuthority`` if you want to make new business logic to control access to your system.
 
@@ -242,14 +242,14 @@ None
 API Reference
 -------------
 
-function permitted
+function canCall
 ^^^^^^^^^^^^^^^^
 
 This function returns ``true`` if the ``src`` address can call the ``sig`` function(s) on the ``dst`` contract.
 
 ::
 
-    function permitted(
-        address src, address dst, bytes32 sig
+    function canCall(
+        address src, address dst, bytes4 sig
     ) constant returns (bool)
 

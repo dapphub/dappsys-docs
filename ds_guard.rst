@@ -12,11 +12,11 @@ DS-Guard is an implementation of the :ref:`DSAuthority <DSAuthority>` interface.
 
     mapping (bytes32 => mapping (bytes32 => mapping (bytes32 => bool))) acl
 
-It is easy to understand the semantics of this mapping when comparing it against the definition of the ``permitted`` function that makes up the ``DSAuthority`` interface:
+It is easy to understand the semantics of this mapping when comparing it against the definition of the ``canCall`` function that makes up the ``DSAuthority`` interface:
 
 ::
 
-    function permitted(address src, address dst, bytes4 sig)
+    function canCall(address src, address dst, bytes4 sig)
 
 Thus, the key of the outermost mapping is the ``src`` (or calling) address, the key of the middle mapping is the ``dst`` (or destination) address, and the key of the innermost mapping is the ``sig`` function.
 
@@ -73,21 +73,21 @@ This will return the contract's public ``ANY`` constant, which is an alias for t
 
     bytes32 constant public ANY = bytes32(uint(-1))
 
-function permitted
+function canCall
 ^^^^^^^^^^^^^^^^
 
 This function definition is inherited from :ref:`DSAuthority <DSAuthority>` and will return ``true`` if the ``DSGuard`` holds authorization data that allows the ``src`` address to call the ``sig`` function on the ``dst`` address. This will either be an explicit authorization entry for the specific ``(src, dst, sig)`` triple in question, or a blanket ANY permission (see the introduction above for the different types of ANY permissions).
 
 ::
 
-    function permitted(
-        address src, address dst, bytes32 sig
+    function canCall(
+        address src, address dst, bytes4 sig
     ) constant returns (bool)
 
 function okay
 ^^^^^^^^^^^^^
 
-This function has three signatures and is controlled by the ``authorized`` modifier. It allows the caller to edit the whitelist that is consulted by the ``permitted`` function.
+This function has three signatures and is controlled by the ``authorized`` modifier. It allows the caller to edit the whitelist that is consulted by the ``canCall`` function.
 
 The first signature will write the value of ``yes`` to the ``(src, dst, sig)`` triple in the whitelist.
 
