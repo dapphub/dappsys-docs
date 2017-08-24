@@ -55,14 +55,23 @@ Parent Types
 API Reference
 -------------
 
-event LogOkay
-^^^^^^^^^^^^^
+event LogPermit
+^^^^^^^^^^^^^^^
 
-This event is logged when modifying the contract's authorization data by calling the ``okay`` function. 
+This event is logged when modifying the contract's authorization data by calling the ``permit`` function. 
 
 ::
 
-    event LogOkay(bytes32 src, bytes32 dst, bytes32 sig, bool yes)
+    event LogPermit(bytes32 indexed src, bytes32 indexed dst, bytes32 indexed sig)
+
+event LogForbid
+^^^^^^^^^^^^^^^
+
+This event is logged when modifying the contract's authorization data by calling the ``forbid`` function.
+
+::
+
+    event LogForbid(bytes32 indexed src, bytes32 indexed dst, bytes32 indexed sig)
 
 function ANY
 ^^^^^^^^^^^^
@@ -84,26 +93,35 @@ This function definition is inherited from :ref:`DSAuthority <DSAuthority>` and 
         address src, address dst, bytes4 sig
     ) constant returns (bool)
 
-function okay
-^^^^^^^^^^^^^
+function permit
+^^^^^^^^^^^^^^^
 
-This function has three signatures and is controlled by the ``authorized`` modifier. It allows the caller to edit the whitelist that is consulted by the ``canCall`` function.
-
-The first signature will write the value of ``yes`` to the ``(src, dst, sig)`` triple in the whitelist.
+This function has two signatures and is controlled by the ``auth`` modifier. It allows the caller to add new addresses to the whitelist that is consulted by the ``canCall`` function.
 
 ::
 
-    function okay(bytes32 src, bytes32 dst, bytes32 sig, bool yes) authorized("okay")
+    function permit(bytes32 src, bytes32 dst, bytes32 sig) auth
 
-This signature is an alias for ``okay(src, dst, sig, true)``
 
-::
-
-    function okay(address src, address dst, bytes32 sig)
-
-This signature is an alias for ``okay(src, dst, ANY, true)``
+This signature will cast ``address src`` to a ``bytes32`` array for you.
 
 ::
 
-    function okay(address src, address dst)
+    function permit(address src, address dst, bytes32 sig)
+
+function forbid
+^^^^^^^^^^^^^^^
+
+This function has two signatures and is controlled by the ``auth`` modifier. It allows the caller to remove existing addresses from the whitelist that is consulted by the ``canCall`` function.
+
+::
+
+    function forbid(bytes32 src, bytes32 dst, bytes32 sig) auth
+
+
+This signature will cast ``address src`` to a ``bytes32`` array for you.
+
+::
+
+    function forbid(address src, address dst, bytes32 sig)
 
