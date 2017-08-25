@@ -1,5 +1,5 @@
 # Uncomment the line below to build with readthedocs.io styling locally
-#import sphinx_rtd_theme
+import sphinx_rtd_theme
 
 # -*- coding: utf-8 -*-
 #
@@ -89,8 +89,8 @@ todo_include_todos = False
 html_theme = 'default'
 
 # Uncomment these two lines to build with readthedocs.io styling locally
-#html_theme = 'sphinx_rtd_theme'
-#html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

@@ -21,4 +21,5 @@ stable Ethereum building blocks
    ds_note.rst
    ds_token.rst
    ds_stop.rst
+   ds_thing.rst
    
